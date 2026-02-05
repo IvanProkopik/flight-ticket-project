@@ -14,7 +14,7 @@ public class TicketService {
 
     }
 
-    private static TicketService getInstance(){
+    public static TicketService getInstance(){
         return INSTANCE;
     }
 
