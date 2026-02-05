@@ -63,6 +63,26 @@ public class TicketDao implements Dao<Long, Ticket> {
         return INSTANCE;
     }
 
+    public List<Ticket> findAllByFlightId(Long flightId) {
+        try (var connection = ConnectionManager.get();
+             var preparedStatement = connection.prepareStatement(FIND_ALL_BY_FLIGHT_ID)) {
+
+            preparedStatement.setObject(1, flightId);
+
+            var resultSet = preparedStatement.executeQuery();
+            List<Ticket> tickets = new ArrayList<>();
+
+            while (resultSet.next()) {
+                tickets.add(buildTicket(resultSet));
+            }
+
+            return tickets;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Помилка при отриманні квитків для рейсу: " + flightId, e);
+        }
+    }
+
 
     @Override
     public List<Ticket> findAll() {
