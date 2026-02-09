@@ -18,5 +18,4 @@ public class Flight {
     private String arrivalAirportCode;
     private Integer aircraftId;
     private FlightStatus status;
-
 }

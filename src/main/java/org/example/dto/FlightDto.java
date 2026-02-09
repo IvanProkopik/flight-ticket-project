@@ -1,16 +1,6 @@
 package org.example.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-
-@Getter
-@EqualsAndHashCode
-@ToString
-@AllArgsConstructor
-public class FlightDto {
-    private final Long id;
-    private final String description;
-
+public record FlightDto(
+        Long id,
+        String description) {
 }
