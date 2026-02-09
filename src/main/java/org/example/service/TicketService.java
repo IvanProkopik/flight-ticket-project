@@ -28,7 +28,9 @@ public class TicketService {
         return new TicketDto(
                 ticket.getId(),
                 ticket.getFlightId(),
-                ticket.getSeatNo()
+                ticket.getSeatNo(),
+                ticket.getPassengerName(),
+                ticket.getCost()
         );
     }
 
