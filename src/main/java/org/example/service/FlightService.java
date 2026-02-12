@@ -6,6 +6,7 @@ import org.example.entity.Flight;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class FlightService {
     private static final FlightService INSTANCE = new FlightService();
@@ -23,6 +24,11 @@ public class FlightService {
         return flightDao.findAll().stream()
                 .map(this::buildFlightDto)
                 .toList();
+    }
+    public Optional<FlightDto> findById(Long id){
+        return flightDao.findById(id).stream()
+                .map(this::buildFlightDto)
+                .findAny();
     }
 
     private FlightDto buildFlightDto(Flight flight) {

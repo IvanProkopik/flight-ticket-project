@@ -4,7 +4,6 @@ import org.example.entity.Flight;
 import org.example.entity.FlightStatus;
 import org.example.util.ConnectionManager;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -56,30 +55,29 @@ public class FlightDao implements Dao<Long, Flight> {
             VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
 
-    private FlightDao(){
+    private FlightDao() {
 
     }
 
-    public static FlightDao getInstance(){
-       return INSTANCE;
+    public static FlightDao getInstance() {
+        return INSTANCE;
     }
 
     @Override
     public List<Flight> findAll() {
 
         try (var connection = ConnectionManager.get();
-             var preparedStatement = connection.prepareStatement(FIND_ALL))
-        {
+             var preparedStatement = connection.prepareStatement(FIND_ALL)) {
             var resultSet = preparedStatement.executeQuery();
             List<Flight> flights = new ArrayList<>();
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 flights.add(buildFlight(resultSet));
             }
 
             return flights;
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("Помилка при отриманні всіх рейсів", e);
         }
     }
@@ -165,6 +163,7 @@ public class FlightDao implements Dao<Long, Flight> {
             throw new RuntimeException("Помилка при збереженні рейсу", e);
         }
     }
+
     private Flight buildFlight(ResultSet resultSet) throws SQLException {
         return new Flight(
                 resultSet.getObject("id", Long.class),
@@ -176,5 +175,5 @@ public class FlightDao implements Dao<Long, Flight> {
                 resultSet.getObject("aircraft_id", Integer.class),
                 FlightStatus.valueOf(resultSet.getObject("status", String.class))
         );
-}
     }
+}
