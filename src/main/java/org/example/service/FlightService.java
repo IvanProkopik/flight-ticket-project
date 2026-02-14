@@ -26,10 +26,8 @@ public class FlightService {
                 .toList();
     }
 
-    public Optional<FlightDto> findById(Long id) {
-        return flightDao.findById(id).stream()
-                .map(this::buildFlightDto)
-                .findAny();
+    public Optional<Flight> findById(Long id) {
+        return flightDao.findById(id);
     }
 
     public boolean delete(Long id) {
@@ -49,5 +47,9 @@ public class FlightService {
 
     public Flight save(Flight flight) {
         return flightDao.save(flight);
+    }
+
+    public void update(Flight flight){
+        flightDao.update(flight);
     }
 }

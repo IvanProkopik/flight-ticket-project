@@ -31,7 +31,7 @@ public class FlightServlet extends HttpServlet {
 
         if (flightIdParam != null){
             try {
-                Optional<FlightDto> flight = flightService.findById(Long.parseLong(flightIdParam));
+                Optional<Flight> flight = flightService.findById(Long.parseLong(flightIdParam));
                 if (flight.isPresent()) {
                     objectMapper.writeValue(resp.getOutputStream(), flight);
                 } else {
@@ -112,5 +112,47 @@ public class FlightServlet extends HttpServlet {
                 resp.getWriter().write("{\"error:\":\"Something went wrong! Invalid id\"}");
             }
         }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+
+        String id = req.getParameter("id");
+        String arrivalDate = req.getParameter("arrivalDate");
+        String status = req.getParameter("status");
+
+        if (id != null && !id.isEmpty()){
+            try {
+                Long idParam = Long.parseLong(id);
+                LocalDateTime arrivalDateParam = LocalDateTime.parse(arrivalDate);
+                FlightStatus statusParam = FlightStatus.valueOf(status);
+
+                Optional<Flight> existFlight = flightService.findById(idParam);
+                if (existFlight.isPresent()){
+                    Flight newFlight = Flight.builder()
+                            .id(existFlight.get().getId())
+                            .flightNo(existFlight.get().getFlightNo())
+                            .departureDate(existFlight.get().getDepartureDate())
+                            .departureAirportCode(existFlight.get().getDepartureAirportCode())
+                            .arrivalAirportCode(existFlight.get().getArrivalAirportCode())
+                            .aircraftId(existFlight.get().getAircraftId())
+                            .status(statusParam)
+                            .arrivalDate(arrivalDateParam)
+                            .build();
+
+                    flightService.update(newFlight);
+
+                } else {
+                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    resp.getWriter().write("{\"error:\":\"Something went wrong! Invalid id\"}");
+                }
+
+            } catch (NumberFormatException e){
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write("{\"error:\":\"Something went wrong! Invalid id\"}");
+            }
+            }
     }
 }
