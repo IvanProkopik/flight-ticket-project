@@ -3,7 +3,7 @@ package org.example.entity;
 import lombok.*;
 
 import java.time.LocalDateTime;
-
+@Builder
 @Getter
 @Setter
 @EqualsAndHashCode

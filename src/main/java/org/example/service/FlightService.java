@@ -12,23 +12,28 @@ public class FlightService {
     private static final FlightService INSTANCE = new FlightService();
     private static final FlightDao flightDao = FlightDao.getInstance();
 
-    private FlightService(){
+    private FlightService() {
 
     }
 
-    public static FlightService getInstance(){
+    public static FlightService getInstance() {
         return INSTANCE;
     }
 
-    public List<FlightDto> findAll(){
+    public List<FlightDto> findAll() {
         return flightDao.findAll().stream()
                 .map(this::buildFlightDto)
                 .toList();
     }
-    public Optional<FlightDto> findById(Long id){
+
+    public Optional<FlightDto> findById(Long id) {
         return flightDao.findById(id).stream()
                 .map(this::buildFlightDto)
                 .findAny();
+    }
+
+    public boolean delete(Long id) {
+        return flightDao.delete(id);
     }
 
     private FlightDto buildFlightDto(Flight flight) {
@@ -42,4 +47,7 @@ public class FlightService {
         return new FlightDto(flight.getId(), description);
     }
 
+    public Flight save(Flight flight) {
+        return flightDao.save(flight);
+    }
 }
